@@ -1,41 +1,33 @@
 from django.http import HttpResponse
 from django.template import loader
 
-geo_json = {
-    "type": "FeatureCollection",
-    "features": [
+from places.models import Place
+
+
+def get_geo_json():
+    features = [
         {
             "type": "Feature",
             "geometry": {
                 "type": "Point",
-                "coordinates": [37.62, 55.793676]
+                "coordinates": [place.longitude, place.latitude]
             },
             "properties": {
-                "title": "«Легенды Москвы",
-                "placeId": "moscow_legends",
+                "title": place.title,
+                "placeId": place.id,
                 "detailsUrl": "static/places/moscow_legends.json"
             }
-        },
-        {
-            "type": "Feature",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [37.64, 55.753676]
-            },
-            "properties": {
-                "title": "Крыши24.рф",
-                "placeId": "roofs24",
-                "detailsUrl": "static/places/roofs24.json"
-            }
-        }
+        } for place in Place.objects.all()
     ]
-}
+    geo_json = {
+        "type": "FeatureCollection",
+        "features": features
+    }
+    return geo_json
 
 
 def show_index_page(request):
     template = loader.get_template('index.html')
-    context = {'geo_json': geo_json}
+    context = {'geo_json': get_geo_json()}
     rendered_page = template.render(context, request)
-
     return HttpResponse(rendered_page)
-
