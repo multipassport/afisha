@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from django.template import loader
 
 from places.models import Place
@@ -31,3 +32,8 @@ def show_index_page(request):
     context = {'geo_json': get_geo_json()}
     rendered_page = template.render(context, request)
     return HttpResponse(rendered_page)
+
+
+def show_place(request, place_id):
+    place = get_object_or_404(Place, id=place_id)
+    return HttpResponse(place)
