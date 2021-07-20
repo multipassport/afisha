@@ -1,11 +1,12 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template import loader
+from django.urls import reverse
 
 from places.models import Place
 
 
-def get_geo_json():
+def create_geo_json():
     features = [
         {
             "type": "Feature",
@@ -16,7 +17,7 @@ def get_geo_json():
             "properties": {
                 "title": place.title,
                 "placeId": place.id,
-                "detailsUrl": "static/places/moscow_legends.json"
+                "detailsUrl": reverse('places', args=[place.id])
             }
         } for place in Place.objects.all()
     ]
@@ -29,11 +30,23 @@ def get_geo_json():
 
 def show_index_page(request):
     template = loader.get_template('index.html')
-    context = {'geo_json': get_geo_json()}
+    context = {'geo_json': create_geo_json()}
     rendered_page = template.render(context, request)
     return HttpResponse(rendered_page)
 
 
 def show_place(request, place_id):
     place = get_object_or_404(Place, id=place_id)
-    return HttpResponse(place)
+    details = {
+        "title": place.title,
+        "imgs": [image.image.url for image in place.images.all()],
+        "description_short": place.description_short,
+        "description_long": place.description_long,
+        "coordinates": {
+            "lng": place.longitude,
+            "lat": place.latitude
+        }
+    }
+    return JsonResponse(
+        details,
+        json_dumps_params={'ensure_ascii': False, 'indent': 2})
