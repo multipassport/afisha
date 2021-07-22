@@ -16,7 +16,7 @@ CSRF_COOKIE_SECURE = True
 
 SESSION_COOKIE_SECURE = True
 
-ALLOWED_HOSTS = env.url('ALLOWED_HOSTS', default=['*'])
+ALLOWED_HOSTS = env.url('ALLOWED_HOSTS', default=['http://multipassport.pythonanywhere.com/'])
 
 INSTALLED_APPS = [
     'django.contrib.admin',
