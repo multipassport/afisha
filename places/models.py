@@ -15,7 +15,7 @@ class Place(models.Model):
 
 
 class Image(models.Model):
-    image = models.ImageField(verbose_name='Картинка', upload_to='media/')
+    image = models.ImageField(verbose_name='Картинка')
     position = models.PositiveSmallIntegerField(
         verbose_name='Позиция',
         default=0,
