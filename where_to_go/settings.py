@@ -12,10 +12,6 @@ SECRET_KEY = env.str('DJANGO_SECRET_KEY', default='replace_me')
 
 DEBUG = env.bool('DEBUG', default=False)
 
-CSRF_COOKIE_SECURE = True
-
-SESSION_COOKIE_SECURE = True
-
 ALLOWED_HOSTS = env.url('ALLOWED_HOSTS')
 
 INSTALLED_APPS = [
