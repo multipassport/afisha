@@ -3,8 +3,6 @@ from django.contrib import admin
 from django.utils.html import format_html
 from .models import Place, Image
 
-admin.site.register(Image)
-
 
 class ImageInline(SortableInlineAdminMixin, admin.TabularInline):
     model = Image
@@ -22,5 +20,10 @@ class ImageInline(SortableInlineAdminMixin, admin.TabularInline):
 
 
 @admin.register(Place)
-class UserAdmin(admin.ModelAdmin):
+class PlaceAdmin(admin.ModelAdmin):
     inlines = (ImageInline,)
+
+
+@admin.register(Image)
+class ImageAdmin(admin.ModelAdmin):
+    list_display = ('image',)
