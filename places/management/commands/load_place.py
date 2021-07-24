@@ -16,7 +16,7 @@ def download_image(url, place_id):
         response.raise_for_status()
         image_content = ContentFile(response.content)
         image_name = os.path.split(urlsplit(url).path)[-1]
-        Path('/media').mkdir(exist_ok=True)
+        Path(os.path.join(settings.BASE_DIR, 'media')).mkdir(exist_ok=True)
         if image_name not in os.listdir(settings.MEDIA_ROOT):
             image, _ = Image.objects.get_or_create(
                 image=image_name, place_id=place_id)
