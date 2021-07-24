@@ -36,8 +36,7 @@ def get_place(url):
     return response.json()
 
 
-def create_place(url):
-    place_content = get_place(url)
+def create_place(place_content):
     place, _ = Place.objects.get_or_create(
         title=place_content['title'],
         longitude=place_content['coordinates']['lng'],
@@ -54,7 +53,11 @@ class Command(BaseCommand):
     help = 'Upload images from .json file'
 
     def add_arguments(self, parser):
-        parser.add_argument('place_url', type=str)
+        parser.add_argument(
+            'place_url', type=str,
+            help='Input url of json file containing Place model data'
+        )
 
     def handle(self, *args, **options):
-        create_place(options['place_url'])
+        place_content = get_place(options['place_url'])
+        create_place(place_content)
