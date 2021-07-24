@@ -13,7 +13,6 @@ def get_places_urls(initial_url, changed_url):
         response.raise_for_status()
         soup = BeautifulSoup(response.text, 'html.parser')
         box_class = 'js-navigation-open Link--primary'
-        # print(len(soup.find_all(class_=box_class)))
         for string in soup.find_all(class_=box_class):
             yield os.path.join(changed_url, quote(string['title']))
     except(HTTPError, ConnectionError) as error:
