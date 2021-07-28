@@ -19,8 +19,8 @@ class Image(models.Model):
     position = models.PositiveSmallIntegerField(
         verbose_name='Позиция',
         default=0,
-        blank=False,
-        null=False,
+        blank=True,
+        db_index=True,
     )
     place = models.ForeignKey(
         'Place',
