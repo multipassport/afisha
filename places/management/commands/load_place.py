@@ -15,16 +15,17 @@ def download_image(url, place_id):
         response = requests.get(url)
         response.raise_for_status()
         image_content = ContentFile(response.content)
+    except ConnectionError:
+        raise CommandError('ConnectionError. Try again later')
+    except HTTPError:
+        raise CommandError(f'Photo from {url} is not found')
+    else:
         image_name = os.path.split(urlsplit(url).path)[-1]
         Path(os.path.join(settings.BASE_DIR, 'media')).mkdir(exist_ok=True)
         if image_name not in os.listdir(settings.MEDIA_ROOT):
             image, _ = Image.objects.get_or_create(
                 image=image_name, place_id=place_id)
             image.image.save(image_name, image_content, save=True)
-    except ConnectionError:
-        raise CommandError('ConnectionError. Try again later')
-    except HTTPError:
-        raise CommandError(f'Photo from {url} is not found')
 
 
 def get_place(url):
