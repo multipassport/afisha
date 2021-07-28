@@ -1,6 +1,5 @@
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import get_object_or_404
-from django.template import loader
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 
 from places.models import Place
@@ -30,10 +29,8 @@ def create_geo_json(places):
 
 def show_index_page(request):
     places = Place.objects.all()
-    template = loader.get_template('index.html')
-    context = {'geo_json': create_geo_json(places)}
-    rendered_page = template.render(context, request)
-    return HttpResponse(rendered_page)
+    places_context = {'geo_json': create_geo_json(places)}
+    return render(request, 'index.html', context=places_context)
 
 
 def show_place(request, place_id):
