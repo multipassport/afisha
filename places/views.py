@@ -6,7 +6,7 @@ from django.urls import reverse
 from places.models import Place
 
 
-def create_geo_json():
+def create_geo_json(places):
     features = [
         {
             "type": "Feature",
@@ -19,7 +19,7 @@ def create_geo_json():
                 "placeId": place.id,
                 "detailsUrl": reverse('places', args=[place.id])
             }
-        } for place in Place.objects.all()
+        } for place in places
     ]
     geo_json = {
         "type": "FeatureCollection",
@@ -29,8 +29,9 @@ def create_geo_json():
 
 
 def show_index_page(request):
+    places = Place.objects.all()
     template = loader.get_template('index.html')
-    context = {'geo_json': create_geo_json()}
+    context = {'geo_json': create_geo_json(places)}
     rendered_page = template.render(context, request)
     return HttpResponse(rendered_page)
 
