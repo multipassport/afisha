@@ -10,12 +10,11 @@ class ImageInline(SortableInlineAdminMixin, admin.TabularInline):
     sortable_by = ('id',)
     readonly_fields = ('show_image',)
 
-    def show_image(self, obj):
+    def show_image(self, photo):
         max_height = 200
-        return format_html('<img src="{url}" width="{width}" height="{height}" />'.format(
-            url=obj.image.url,
-            width=obj.image.width / (obj.image.height / max_height),
-            height=max_height
+        return format_html('<img src="{}" style="max-height:{}px" />'.format(
+            photo.image.url,
+            max_height
         ))
 
 
