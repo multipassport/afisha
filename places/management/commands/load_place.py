@@ -43,15 +43,16 @@ def create_place(place_content):
         title=place_content['title'],
         defaults={'longitude': 55.755814, 'latitude': 37.617635},
     )
-    if created:
-        place.longitude = place_content['coordinates']['lng']
-        place.latitude = place_content['coordinates']['lat']
-        place.description_long = place_content['description_long']
-        place.description_short = place_content['description_short']
-        place.save()
-        place_id = place.id
-        for photo_url in place_content['imgs']:
-            download_image(photo_url, place_id)
+    if not created:
+        return None
+    place.longitude = place_content['coordinates']['lng']
+    place.latitude = place_content['coordinates']['lat']
+    place.description_long = place_content['description_long']
+    place.description_short = place_content['description_short']
+    place.save()
+    place_id = place.id
+    for photo_url in place_content['imgs']:
+        download_image(photo_url, place_id)
 
 
 class Command(BaseCommand):
